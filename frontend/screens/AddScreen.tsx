@@ -10,7 +10,8 @@ import {
   ImageBackground,
   Text,
   TouchableOpacity,
-  View
+  View,
+  Alert
 } from "react-native";
 
 import { RobotoCondText } from "../components/StyledText";
@@ -128,7 +129,6 @@ class AddScreen extends React.Component<State> {
                 />
               </View>
             </View>
-            <CustomSpacer width="100%" aspectRatio={40 / 1} />
             <Text
               style={[
                 fontStyles.headerSmall,
@@ -206,6 +206,12 @@ class AddScreen extends React.Component<State> {
               />
             </View>
           </View>
+          <CustomSpacer width="100%" aspectRatio={30 / 1} />
+          <TouchableOpacity
+            style={customStyles.imageUploadContainer}
+            onPress={() => Alert.alert("You pressed it")}
+          ></TouchableOpacity>
+          <CustomSpacer width="100%" aspectRatio={30 / 1} />
         </SafeAreaView>
       </ImageBackground>
     );
@@ -261,8 +267,7 @@ const customStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     width: wp("100%"),
-    aspectRatio: 13 / 16,
-    backgroundColor: "pink"
+    aspectRatio: 13 / 16
   },
   labelContainer: {
     flexDirection: "column",
@@ -270,6 +275,18 @@ const customStyles = StyleSheet.create({
     justifyContent: "flex-start",
     width: wp("100%"),
     aspectRatio: 3 / 1
+  },
+  imageUploadContainer: {
+    flex: 1,
+    width: "90%",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 20,
+    borderWidth: 4,
+    backgroundColor: UIConstants.appBlackColor60T,
+    marginLeft: UIConstants.appMarginLeft,
+    marginRight: UIConstants.appMarginRight
   },
   orContainer: {
     flex: 1,
