@@ -7,6 +7,6 @@ from .models import Photo
 def index(request):
     # return HttpResponse("Hello, world. You're at the PHOTOS index.")
     # get all current photos ordered by the latest
-    all_documents = Photo.objects.all().order_by('-id')
+    all_images = Photo.objects.all().order_by('-id')
     # return the index.html template, passing in all the feeds
-    return render(request, 'index.html', {'all_documents': all_documents})
+    return render(request, 'index.html', {'all_images': all_images})
