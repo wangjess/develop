@@ -17,12 +17,13 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     # Added dummy path
     path('users/', include('users.urls')),
+    # ROOT SHIT
+    path('admin/', admin.site.urls),
     # User paths
     path('users/delete', include('users.urls')),
-    path('users/edit', include('')),
+    path('users/edit', include('users.urls')),
     ## Photo paths
     path('photos/', include('photos.urls')),
     path('photos/delete', include('photos.urls')),
