@@ -1,15 +1,25 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+
 from .models import User
 
-# Create your views here.
-# def index(request):
-#     return HttpResponse("Hello, world. You're at the USERS index.")
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework import status
+from .serializers import *
 
-def index(request):
-    latest_user_list = User.objects.order_by('id')[:5]
-    output = ', '.join([u.username for u in latest_user_list])
-    return HttpResponse(output)
+# Create your views here.
+
+@api_view(['GET', 'POST'])
+def list_users(request):
+    """Lists users."""
+    if request.method == 'GET':
+        latest_user_list = User.objects.order_by('id')[:5]
+        output = ', '.join([u.username for u in latest_user_list])
+        return HttpResponse(output)
+        return HttpResponse({'data': serializer.data})
+    elif request.method == 'POST':
+        return HttpResponse('tried to fucking post bitch')
 
 # Get more detail about a user.
 def detail(request, id):
