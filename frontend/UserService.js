@@ -1,7 +1,7 @@
 import axios from 'axios';
 const API_URL = 'http://localhost:8000';
 
-export default class User {
+export default class UserService {
     constructor(){}
 
     getUsers() {
