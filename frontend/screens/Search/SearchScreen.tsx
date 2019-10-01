@@ -17,7 +17,7 @@ import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { customStyles, dropDownStyle, categoryDropDownStyles } from "./styles";
 import { UIConstants } from "../../common/constants";
 import { fontStyles } from "../../common/styles";
-import UsersList from "../../UsersList.js";
+// import UsersList from "../../UsersList.js";
 
 type Props = {
   userName: string;
@@ -41,7 +41,7 @@ class SearchScreen extends React.Component<Props, State> {
 
   static defaultProps = {
     userName: "Jason",
-    user: UsersList[0],
+    // user: UsersList[0],
     categoryList: [
       { label: "All", value: "0" },
       { label: "Foods", value: "1" },

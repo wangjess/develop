@@ -1,23 +1,24 @@
-import uuid
 import logging
+import uuid
 
-from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.contrib.auth.validators import UnicodeUsernameValidator
-from django.utils.translation import ugettext as _
+from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
-# Create your models here
 LOG = logging.getLogger(__name__)
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
-
     def _create_user(self, username, email, password, **extra_fields):
         """
         Create and save a user with the given username, email, and password.
         """
         if not username:
             raise ValueError('The given username must be set')
+        if not email:
+            raise ValueError('The given email must be set')
         username = self.model.normalize_username(username)
         user = self.model(
             username=username,
@@ -34,21 +35,20 @@ class UserManager(BaseUserManager):
         return user
 
     def create_user(self, username, email=None, password=None, **extra_fields):
+        extra_fields.setdefault('is_superuser', False)
         return self._create_user(username, email, password, **extra_fields)
 
-    # Might be useful
     def create_superuser(self, username, email, password, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
         return self._create_user(username, email, password, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
     """
-    Username, email and password are required. Other fields are optional.
+    Fully featured User model with
+    admin-compliant permissions.
+    Username and password are required. Other fields are optional.
     """
     username_validator = UnicodeUsernameValidator()
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -62,6 +62,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             'unique': _("A user with that username already exists."),
         },
     )
+    name = models.CharField(_('name'), max_length=255, blank=True)
     objects = UserManager()
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
@@ -74,7 +75,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         super().clean()
         # self.email = self.__class__.objects.normalize_email(self.email)
 
-    def get_userName(self):
+    def get_username(self):
+        """Return the username for the user."""
         return self.username
 
     @property
@@ -86,7 +88,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         email = self.email
         if email:
             send_mail(subject, message, from_email, [self.email], **kwargs)
-            
+
     def get_primary_email(self):
         return self.emailaddress_set.filter(primary=True).first()
 
@@ -94,7 +96,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         email = self.get_primary_email()
         if email:
             return email.email
-
+            
     def get_email_verified(self):
         email = self.get_primary_email()
         if email:
