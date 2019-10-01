@@ -10,5 +10,6 @@ class Photo(models.Model):
         return self.description
 
     # Return document.
+    # FIXME
     def get_username(self):
         return self.document
