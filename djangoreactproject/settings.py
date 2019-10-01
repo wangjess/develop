@@ -34,13 +34,12 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
 )
 
-# SETTINGS
-# AUTH_USER_MODEL = 'users.User'
-
 # Application definition
 
 INSTALLED_APPS = [
+    # Custom Apps
     'users.apps.UsersConfig',
+    # Gobbledegook
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -49,7 +48,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    # 'users',
 ]
 
 MIDDLEWARE = [
