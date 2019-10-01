@@ -39,6 +39,7 @@ CORS_ORIGIN_WHITELIST = (
 INSTALLED_APPS = [
     # Custom Apps
     'users.apps.UsersConfig',
+    'photos.apps.PhotosConfig',
     # Gobbledegook
     'django.contrib.admin',
     'django.contrib.auth',
