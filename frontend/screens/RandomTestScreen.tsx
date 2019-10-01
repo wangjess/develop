@@ -21,7 +21,7 @@ import CustomSpacer from "../components/CustomSpacer";
 import { UIConstants } from "../common/constants";
 import { fontStyles } from "../common/styles";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { usersService } from  "../UsersService.js";
+// import { usersService } from  "../UsersService.js";
 
 
 type State = {
@@ -37,7 +37,7 @@ class RandomTestScreen extends React.Component<Props, State> {
   };
   
   static defaultProps = {
-    user: usersService,
+    // user: usersService,
   }
 
   state = {
