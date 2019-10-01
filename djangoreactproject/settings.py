@@ -35,7 +35,7 @@ CORS_ORIGIN_WHITELIST = (
 )
 
 # SETTINGS
-AUTH_USER_MODEL = 'users.User'
+# AUTH_USER_MODEL = 'users.User'
 
 # Application definition
 
@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'users',
+    # 'users',
 ]
 
 MIDDLEWARE = [
