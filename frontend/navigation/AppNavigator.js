@@ -12,6 +12,7 @@ import LoginScreen from "../screens/LoginScreen";
 import GalleryNameScreen from "../screens/GalleryNameScreen";
 import ShareGalleryScreen from "../screens/ShareGalleryScreen";
 import SplashScreen from "../screens/SplashScreen";
+import RandomTestScreen from "../screens/RandomTestScreen";
 
 const config = Platform.select({
   web: { headerMode: "screen" },
@@ -26,15 +27,21 @@ const LoginCreateAccountStack = createStackNavigator({
   GalleryName: GalleryNameScreen,
   ShareGallery: ShareGalleryScreen
 });
-
 LoginCreateAccountStack.path = "";
+
+const RandomStack = createStackNavigator({
+  RandomTest: RandomTestScreen,
+});
+
+RandomStack.path = "";
 
 export default createAppContainer(
   createSwitchNavigator(
     {
       // You could add another route here for authentication.
       // Read more at https://reactnavigation.org/docs/en/auth-flow.html
-      SplashScreen: SplashScreen,
+      SplashScreen: RandomTestScreen,
+      RandomTest: RandomStack,
       LoginCreateAccount: LoginCreateAccountStack,
       Main: MainTabNavigator
     },

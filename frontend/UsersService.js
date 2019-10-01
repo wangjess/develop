@@ -1,7 +1,7 @@
 import axios from 'axios';
 const API_URL = 'http://localhost:8000';
 
-export default class UserService {
+export default class UsersService {
     constructor(){}
 
     getUsers() {
@@ -29,3 +29,5 @@ export default class UserService {
         return axios.put(url,user);
     }
 }
+
+export const  usersService  =  new  UsersService();
