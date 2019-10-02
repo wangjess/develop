@@ -16,17 +16,20 @@ import {
 
 import { RobotoCondText } from "../components/StyledText";
 import DropDownArrow from "../components/CustomDropDown/DropDownArrow";
+import CustomButton from "../components/CustomButtom/index";
 import RNPickerSelect, { Item } from "react-native-picker-select";
 import CustomSpacer from "../components/CustomSpacer";
 import { UIConstants } from "../common/constants";
 import { fontStyles } from "../common/styles";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { labeledStatement } from "@babel/types";
 
 type State = {
   labelName: string;
   category: string;
   imageUrl: string;
   pickerSelected: any;
+  imageUploaded: boolean;
 };
 
 class AddScreen extends React.Component<State> {
@@ -40,11 +43,12 @@ class AddScreen extends React.Component<State> {
     category: undefined,
     newCategory: undefined,
     imageUrl: undefined,
-    dropdownSelected: undefined,
+    dropdownSelected: null,
+    imageUploaded: false,
     categoryList: [
-      { label: "All", value: "0" },
-      { label: "Foods", value: "1" },
-      { label: "Common", value: "2" }
+      { label: "All", value: "1" },
+      { label: "Foods", value: "2" },
+      { label: "Common", value: "3" }
     ]
   };
 
@@ -62,17 +66,53 @@ class AddScreen extends React.Component<State> {
 
   handleChangeDropDown = (value: any) => {
     const { categoryList } = this.state;
-    let newPick = categoryList.find(cat => cat.value === value);
+    Alert.alert(`${value}`);
+    if (value !== null) {
+      let newPick = categoryList.find(cat => cat.value === value);
+      this.setState({
+        dropdownSelected: value,
+        category: newPick.label
+      });
+      return;
+    }
     this.setState({
-      dropdownSelected: value,
-      category: newPick.label
+      dropdownSelected: undefined,
+      category: undefined
     });
+  };
+
+  handleImageUpload = () => {
+    const { labelName, newCategory, category } = this.state;
+    if (labelName == undefined || labelName == "") {
+      Alert.alert("Image must have a name!");
+      return;
+    }
+    if (
+      (newCategory !== undefined &&
+        newCategory !== "" &&
+        category !== undefined) ||
+      ((newCategory === undefined || newCategory === "") &&
+        category === undefined)
+    ) {
+      Alert.alert("Select or create a new category. Only one please!");
+      return;
+    }
+    if (newCategory !== undefined && newCategory !== "") {
+      Alert.alert(
+        `Image uploaded!\nImageName: ${labelName}\nCategory: ${category} [EMPTY]\n NewCategory: ${newCategory}`
+      );
+      return;
+    }
+    Alert.alert(
+      `Image uploaded!\nImageName: ${labelName}\nCategory: ${category}\n NewCategory: ${newCategory} [EMPTY]`
+    );
   };
 
   render() {
     const {
       labelName,
       imageUrl,
+      imageUploaded,
       categoryList,
       dropdownSelected,
       newCategory
@@ -129,6 +169,7 @@ class AddScreen extends React.Component<State> {
                 />
               </View>
             </View>
+            <CustomSpacer width="100%" aspectRatio={20 / 1} />
             <Text
               style={[
                 fontStyles.headerSmall,
@@ -182,7 +223,7 @@ class AddScreen extends React.Component<State> {
                 Or
               </Text>
             </View>
-            <View style={customStyles.labelContainer}>
+            <View style={customStyles.dropDownContainer}>
               <Text
                 style={[
                   fontStyles.bodyLarge,
@@ -207,10 +248,46 @@ class AddScreen extends React.Component<State> {
             </View>
           </View>
           <CustomSpacer width="100%" aspectRatio={30 / 1} />
-          <TouchableOpacity
-            style={customStyles.imageUploadContainer}
-            onPress={() => Alert.alert("You pressed it")}
-          ></TouchableOpacity>
+          {!imageUploaded ? (
+            <TouchableOpacity
+              style={customStyles.imageUploadContainer}
+              onPress={() => this.setState({ imageUploaded: !imageUploaded })}
+            >
+              <Image
+                source={require("../assets/images/imageupload.png")}
+                style={customStyles.iconContainer}
+                resizeMode="stretch"
+              />
+            </TouchableOpacity>
+          ) : (
+            <View style={{ flex: 1, width: "90%", flexDirection: "column" }}>
+              <ImageBackground
+                source={require("../assets/images/backgroundImage2.png")}
+                style={customStyles.imageUploadedContainer}
+                imageStyle={{ borderRadius: 20 }}
+                resizeMode="stretch"
+              >
+                <CustomButton
+                  backgroundColor={UIConstants.appGreenColor}
+                  color={UIConstants.appGrayColor}
+                  label="SUBMIT IMAGE"
+                  handlePress={() => this.handleImageUpload()}
+                  containerStyle={{ width: "70%", aspectRatio: 5 / 1 }}
+                />
+                <CustomSpacer width="100%" aspectRatio={15 / 1} />
+                <CustomButton
+                  backgroundColor={UIConstants.appBlackColor60T}
+                  color={UIConstants.appRedColor}
+                  label="USE DIFFERENT IMAGE"
+                  handlePress={() => {
+                    Alert.alert("Image cancelled");
+                    this.setState({ imageUploaded: !imageUploaded });
+                  }}
+                  containerStyle={{ width: "70%", aspectRatio: 5 / 1 }}
+                />
+              </ImageBackground>
+            </View>
+          )}
           <CustomSpacer width="100%" aspectRatio={30 / 1} />
         </SafeAreaView>
       </ImageBackground>
@@ -274,7 +351,14 @@ const customStyles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "flex-start",
     width: wp("100%"),
-    aspectRatio: 3 / 1
+    aspectRatio: 4 / 1
+  },
+  dropDownContainer: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    width: wp("100%"),
+    aspectRatio: 4 / 1
   },
   imageUploadContainer: {
     flex: 1,
@@ -282,6 +366,19 @@ const customStyles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
+    borderRadius: 20,
+    borderWidth: 4,
+    backgroundColor: UIConstants.appBlackColor60T,
+    marginLeft: UIConstants.appMarginLeft,
+    marginRight: UIConstants.appMarginRight
+  },
+  imageUploadedContainer: {
+    width: "100%",
+    height: "100%",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
     borderRadius: 20,
     borderWidth: 4,
     backgroundColor: UIConstants.appBlackColor60T,
@@ -332,6 +429,11 @@ const customStyles = StyleSheet.create({
     marginLeft: UIConstants.appMarginLeft,
     marginRight: UIConstants.appMarginRight
   },
+  iconContainer: {
+    aspectRatio: 1,
+    height: undefined,
+    width: "30%"
+  },
   backgroundImage: {
     position: "absolute",
     height: "100%",
@@ -344,8 +446,8 @@ export const dropDownStyle = {
   viewContainer: {
     flexDirection: Platform.OS === "android" ? "row" : null,
     alignItems: Platform.OS === "android" ? "center" : null,
-    width: wp("35%"),
-    aspectRatio: 35 / 18,
+    width: wp("45%"),
+    aspectRatio: 5 / 2,
     backgroundColor: UIConstants.appGreenColor,
     borderColor: UIConstants.appGrayColor,
     marginLeft: UIConstants.appMarginLeft,

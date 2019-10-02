@@ -17,11 +17,9 @@ import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { customStyles, dropDownStyle, categoryDropDownStyles } from "./styles";
 import { UIConstants } from "../../common/constants";
 import { fontStyles } from "../../common/styles";
-// import UsersList from "../../UsersList.js";
 
 type Props = {
   userName: string;
-  user: any;
   categoryList: Item[];
   imageList: [];
 };
@@ -41,7 +39,6 @@ class SearchScreen extends React.Component<Props, State> {
 
   static defaultProps = {
     userName: "Jason",
-    // user: UsersList[0],
     categoryList: [
       { label: "All", value: "0" },
       { label: "Foods", value: "1" },
@@ -61,8 +58,10 @@ class SearchScreen extends React.Component<Props, State> {
     const { searchInput, category } = this.state;
     if (searchInput !== undefined) {
       this.setState({
-        resultText: `Results for "${searchInput}" in Jason's Gallery`
+        resultText: `Results for "${searchInput}" in Jason's Gallery`,
+
       });
+      
     }
     Alert.alert(`SearchInput: ${searchInput} \n Category: ${category}`);
   };
@@ -89,8 +88,7 @@ class SearchScreen extends React.Component<Props, State> {
 
   render() {
     const { searchInput, resultText, dropdownSelected } = this.state;
-    const { categoryList, imageList, user } = this.props;
-    this.setState({ searchInput: user.username });
+    const { categoryList, imageList } = this.props;
 
     return (
       <ImageBackground
